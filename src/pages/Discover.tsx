@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "../components/navigation/Navbar";
 import EpisodeCard from "../components/EpisodeCard";
@@ -21,10 +20,14 @@ const Discover = () => {
   });
   
   return (
-    <div className="min-h-screen bg-background pt-20 pb-16">
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Logo at the top, scrolls away */}
+      <div className="w-full bg-transparent pt-6 pb-2 px-4">
+        <h1 className="text-2xl font-bold text-gold">Vertika</h1>
+      </div>
+      {/* Sticky Navbar below logo */}
       <Navbar />
-      
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 flex-1">
         <h1 className="text-2xl font-bold mb-6">Discover</h1>
         
         {Object.entries(genreGroups).map(([genre, genreEpisodes]) => (

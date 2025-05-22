@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import { useVideo } from "../../contexts/VideoContext";
 import SwipeContainer from "../ui/SwipeContainer";
@@ -130,13 +129,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ episodeId }) => {
         onSwipeLeft={nextEpisode}
         onSwipeRight={previousEpisode}
       >
-        <div className="h-full w-full" onClick={handleVideoClick}>
+        <div className="h-full w-full relative" onClick={handleVideoClick}>
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
               <div className="w-12 h-12 border-4 border-t-gold border-solid rounded-full animate-spin"></div>
             </div>
           )}
-          
+          {/* Video Info Overlay - Title at bottom-left, always visible */}
+          <div className="absolute bottom-0 left-0 z-30 flex flex-col items-start p-4 sm:p-6 pb-8 max-w-[90vw] w-full pointer-events-none bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+            <h2 className="text-2xl sm:text-3xl font-extrabold uppercase text-white drop-shadow-lg tracking-tight break-words" style={{textShadow: '0 2px 8px rgba(0,0,0,0.8)'}}>
+              {currentEpisode.title}
+            </h2>
+          </div>
           <video
             ref={videoRef}
             className="w-full h-full object-cover"
@@ -146,22 +150,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ episodeId }) => {
             <source src={currentEpisode.videoUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          
-          {/* Video Info Overlay - Always visible */}
-          <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/70 to-transparent">
-            <h2 className="text-2xl font-bold text-white">{currentEpisode.title}</h2>
-            <div className="flex gap-2 mt-1">
-              {currentEpisode.genres.map((genre, index) => (
-                <span key={index} className="text-xs uppercase tracking-wide bg-secondary px-2 py-1 rounded">
-                  {genre}
-                </span>
-              ))}
-            </div>
-            <div className="mt-2 flex items-center">
-              <span className="text-gold text-sm font-bold mr-1">{currentEpisode.rating}</span>
-              <span className="text-gold">★</span>
-            </div>
-          </div>
           
           {/* Video Controls - Shows only on interaction */}
           <div className={`video-controls ${showControls ? 'show' : ''}`}>

@@ -1,4 +1,3 @@
-
 import React from "react";
 import VideoPlayer from "../components/video/VideoPlayer";
 import Navbar from "../components/navigation/Navbar";
@@ -17,10 +16,15 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Logo at the top, scrolls away */}
+      <div className="w-full bg-transparent pt-6 pb-2 px-4">
+        <h1 className="text-2xl font-bold text-gold">Vertika</h1>
+      </div>
+      {/* Sticky Navbar below logo */}
       <Navbar />
       
       {/* Main Video Player */}
-      <div className="w-full h-screen bg-black">
+      <div className="w-full h-[100svh] max-h-[100svh] bg-black overflow-hidden">
         <VideoPlayer />
       </div>
       
