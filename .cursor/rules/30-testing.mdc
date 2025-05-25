@@ -1,0 +1,86 @@
+
+# Testing Guidelines
+
+Manual attachment - use when prompted with `@tests`
+
+## Jest + React Testing Library Setup
+Focus on behavior, not implementation details.
+
+```tsx
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Component from './Component';
+
+// Test wrapper with providers
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } }
+  });
+  
+  return ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  );
+};
+
+describe('Component', () => {
+  it('should render correctly', () => {
+    render(<Component />, { wrapper: createWrapper() });
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+});
+```
+
+## Testing Patterns
+- **Unit tests**: Individual components and hooks
+- **Integration tests**: Component interactions
+- **E2E tests**: Critical user journeys (Cypress)
+
+## What to Test
+- User interactions (clicks, form submissions)
+- Data fetching and loading states
+- Error handling and edge cases
+- Accessibility (roles, labels, keyboard navigation)
+
+## What NOT to Test
+- Implementation details (state variables, function calls)
+- Third-party libraries (React Router, TanStack Query)
+- Styles and CSS (use visual regression testing)
+
+## Mock Strategies
+```tsx
+// Mock external dependencies
+jest.mock('../lib/firebaseClient', () => ({
+  getAuth: () => mockAuth,
+  getFirestore: () => mockFirestore,
+}));
+
+// Mock React Router
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+```
+
+## Testing Hooks
+```tsx
+import { renderHook, waitFor } from '@testing-library/react';
+import { useEpisodes } from './useEpisodes';
+
+describe('useEpisodes', () => {
+  it('should fetch episodes', async () => {
+    const { result } = renderHook(() => useEpisodes({ seriesId: '1' }), {
+      wrapper: createWrapper()
+    });
+    
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+    
+    expect(result.current.data).toHaveLength(5);
+  });
+});
+```
