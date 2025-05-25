@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from "react";
 import { useVideo } from "../../contexts/VideoContext";
 import SwipeContainer from "../ui/SwipeContainer";
@@ -132,15 +133,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ episodeId }) => {
         <div className="h-full w-full relative" onClick={handleVideoClick}>
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
-              <div className="w-12 h-12 border-4 border-t-gold border-solid rounded-full animate-spin"></div>
+              <div className="w-12 h-12 border-4 border-t-red-600 border-solid rounded-full animate-spin"></div>
             </div>
           )}
-          {/* Video Info Overlay - Title at bottom-left, always visible */}
-          <div className="absolute bottom-0 left-0 z-30 flex flex-col items-start p-4 sm:p-6 pb-8 max-w-[90vw] w-full pointer-events-none bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-            <h2 className="text-2xl sm:text-3xl font-extrabold uppercase text-white drop-shadow-lg tracking-tight break-words" style={{textShadow: '0 2px 8px rgba(0,0,0,0.8)'}}>
-              {currentEpisode.title}
-            </h2>
-          </div>
+          
           <video
             ref={videoRef}
             className="w-full h-full object-cover"
@@ -151,35 +147,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ episodeId }) => {
             Your browser does not support the video tag.
           </video>
           
-          {/* Video Controls - Shows only on interaction */}
+          {/* Minimal Video Controls - Shows only on interaction */}
           <div className={`video-controls ${showControls ? 'show' : ''}`}>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center">
               <button 
                 onClick={toggleVideoPlay}
-                className="w-12 h-12 flex items-center justify-center bg-gold/20 rounded-full backdrop-blur-sm"
+                className="w-16 h-16 flex items-center justify-center bg-white/20 rounded-full backdrop-blur-sm"
               >
                 {isPlaying ? (
-                  <Pause className="text-white" size={24} />
+                  <Pause className="text-white" size={32} />
                 ) : (
-                  <Play className="text-white" size={24} />
+                  <Play className="text-white" size={32} />
                 )}
-              </button>
-              
-              {/* Progress Bar */}
-              <div className="flex-1 mx-4">
-                <div className="bg-white/30 h-1 rounded-full w-full">
-                  {currentEpisode.durationSec > 0 && (
-                    <div 
-                      className="bg-gold h-full rounded-full"
-                      style={{ width: `${(currentTime / currentEpisode.durationSec) * 100}%` }}
-                    ></div>
-                  )}
-                </div>
-              </div>
-              
-              {/* View Button */}
-              <button className="text-gold hover:text-gold-light font-medium transition-colors text-sm">
-                View
               </button>
             </div>
           </div>
